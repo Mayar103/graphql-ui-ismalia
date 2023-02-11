@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const { Schema } = mongoose;
 
 const postSchema = new Schema({
@@ -15,8 +14,19 @@ const postSchema = new Schema({
 	userId:{
 		type:Schema.Types.ObjectId,
 		ref:'User'
-	}
-	
+	},
+},
+	{
+		toJSON: { virtuals: true },
+		toObject: { virtuals: true }
 });
+
+userSchema.virtual('comments', {
+	ref: 'Comment',
+	foreignField: 'postId',
+	localField: '_id'
+});
+
 const Post = mongoose.model('Post',postSchema);
 module.exports = Post;
+
